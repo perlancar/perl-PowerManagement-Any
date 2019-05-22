@@ -70,7 +70,10 @@ sub _prevent_or_unprevent_sleep_or_check {
             return $res;
         }
         $is_masked = $res->[2];
-        return [200, "OK", $is_masked] if $which eq 'check';
+        return [200, "OK", $is_masked, {
+            'cmdline.exit_code' => !$is_masked,
+            'cmdline.result' => '',
+        }] if $which eq 'check';
         return [304, "sleep.target already masked"]
             if $which eq 'prevent' && $is_masked;
         return [304, "sleep.target already unmasked"]
