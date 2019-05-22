@@ -48,7 +48,7 @@ sub _target_is_masked {
     [200, "OK", $is_masked];
 }
 
-sub _prevent_or_unprevent_sleep {
+sub _prevent_or_unprevent_sleep_or_check {
     my ($which, %args) = @_;
 
   SYSTEMD:
@@ -70,6 +70,7 @@ sub _prevent_or_unprevent_sleep {
             return $res;
         }
         $is_masked = $res->[2];
+        return [200, "OK", $is_masked] if $which eq 'check';
         return [304, "sleep.target already masked"]
             if $which eq 'prevent' && $is_masked;
         return [304, "sleep.target already unmasked"]
@@ -122,7 +123,7 @@ _
     args => {},
 };
 sub prevent_sleep {
-    _prevent_or_unprevent_sleep('prevent', @_);
+    _prevent_or_unprevent_sleep_or_check('prevent', @_);
 }
 
 $SPEC{'unprevent_sleep'} = {
@@ -136,7 +137,21 @@ _
     args => {},
 };
 sub unprevent_sleep {
-    _prevent_or_unprevent_sleep('unprevent', @_);
+    _prevent_or_unprevent_sleep_or_check('unprevent', @_);
+}
+
+$SPEC{'sleep_is_prevented'} = {
+    v => 1.1,
+    summary => 'Check if sleep has been prevented',
+    description => <<'_',
+
+See `prevent_sleep()` for more details.
+
+_
+    args => {},
+};
+sub sleep_is_prevented {
+    _prevent_or_unprevent_sleep_or_check('check', @_);
 }
 
 1;
