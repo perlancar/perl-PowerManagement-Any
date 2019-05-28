@@ -23,13 +23,15 @@ sub _target_is_masked {
     my $target = shift;
 
     my ($out, $err);
-    system({capture_stdout=>\$out, capture_stderr=>\$err},
+    # systemctl status returns exit code=3 for dead/inactive status, so we
+    # explicitly turns log=0 here.
+    system({capture_stdout=>\$out, capture_stderr=>\$err, log=>0},
            "systemctl", "status", $target);
-    # systemctl status always returns exit code=3, even for unknown target?
-    #if ($?) {
-    #    return [500, "Error when running 'systemctl status sleep.target'".
-    #                ": \$?=$?, stderr=$err"];
-    #}
+    if ($? && (my $exit_code = $? < 0 ? $? : $? >> 8) != 3) {
+        log_warn "systemctl status failed, exit code=%d, stderr=%s",
+            $exit_code, $err;
+        return [500, "systemctl status failed with exit code=$exit_code"];
+    }
     $out =~ /^\s*Loaded: ([^(]+)/m or do {
         return [412, "Cannot parse 'systemctl status $target': $out"];
     };
