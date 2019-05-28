@@ -99,7 +99,7 @@ sub _prevent_or_unprevent_sleep_or_check {
         return [304, "Failed to unmask sleep.target"]
             if $which eq 'unprevent' && $is_masked;
 
-        return [200, "OK", {'func.mechanism' => 'systemd'}];
+        return [200, "OK", undef, {'func.mechanism' => 'systemd'}];
     } # SYSTEMD
 
     [412, "Don't know how to perform prevent/unprevent sleep on this system"];
