@@ -112,14 +112,16 @@ $SPEC{'prevent_sleep'} = {
     description => <<'_',
 
 Will also prevent system from hybrid sleeping, suspending, or hibernating. The
-effect is permanent; you need to `unprevent_sleep()` to reverse the effect.
+effect is permanent (survives reboot); you need to `unprevent_sleep()` to
+reverse the effect.
 
 Note that this does not prevent screen blanking or locking (screensaver
 activating); see <pm:Screensaver::Any> for routines that disable screensaver.
 
-On systems that run Systemd, this is implemented by masking the sleep.target. It
-automatically also prevents suspend.target, hybrid-sleep.target, and
-hibernate.target from activating.
+On systems that run Systemd, this is implemented by masking `sleep.target`. It
+automatically also prevents `suspend.target`, `hybrid-sleep.target`, and
+`hibernate.target` from activating. (Note that masking `systemd-suspend.service`
+should also achieve the same result.)
 
 Not implemented yet for other systems. Patches welcome.
 
