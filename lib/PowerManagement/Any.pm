@@ -18,6 +18,15 @@ $SPEC{':package'} = {
     summary => 'Common interface to some power management tasks',
 };
 
+our %argopt_quiet = (
+    quiet => {
+        summary => "Don't output anything on command-line, ".
+            "just return appropriate exit code",
+        schema => 'true*',
+        cmdline_aliases => {q=>{}, silent=>{}},
+    },
+);
+
 # XXX probably should refactor this into Systemd::Util later
 sub _target_is_masked {
     my $target = shift;
@@ -74,8 +83,8 @@ sub _prevent_or_unprevent_sleep_or_check {
         $is_masked = $res->[2];
         return [200, "OK", $is_masked, {
             'cmdline.exit_code' => !$is_masked,
-            'cmdline.result.noninteractive' => '',
-            'cmdline.result.interactive' => "Sleep is ".($is_masked ? "prevented" : "NOT prevented"),
+            'cmdline.result' => $args{quiet} ? '' :
+                "Sleep is ".($is_masked ? "prevented" : "NOT prevented"),
         }] if $which eq 'check';
         return [304, "sleep.target already masked"]
             if $which eq 'prevent' && $is_masked;
@@ -153,10 +162,23 @@ $SPEC{'sleep_is_prevented'} = {
     summary => 'Check if sleep has been prevented',
     description => <<'_',
 
+The CLI return exit code 0 if sleep has been prevented.
+
 See `prevent_sleep()` for more details.
 
 _
-    args => {},
+    args => {
+        %argopt_quiet,
+    },
+    examples => [
+        {
+            summary => 'Run a heavy task if sleep has been prevented on this laptop',
+            src => '[[prog]] -q && some-heavy-task',
+            src_plang => 'bash',
+            test => 0,
+            'x.doc.show_result' => 0,
+        },
+    ],
 };
 sub sleep_is_prevented {
     _prevent_or_unprevent_sleep_or_check('check', @_);
