@@ -1,7 +1,7 @@
 0.005   2019-06-09 (PERLANCAR)
 
-	- [ux] sleep-is-prevented: Now provide --quiet (-q) a la regexp to
-	  be quiet, add examples.
+	- [ux] sleep-is-prevented: Now provide --quiet (-q) a la grep to be
+	  quiet, add examples.
 
 
 0.004   2019-05-28 (PERLANCAR)
