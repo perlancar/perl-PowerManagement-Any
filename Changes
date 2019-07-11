@@ -1,33 +1,33 @@
-0.006   2019-06-10 (PERLANCAR)
+0.006   2019-06-10  Released-By: PERLANCAR
 
 	- No functional changes.
 
 	- Fix typo in Changes.
 
 
-0.005   2019-06-09 (PERLANCAR)
+0.005   2019-06-09  Released-By: PERLANCAR
 
 	- [ux] sleep-is-prevented: Now provide --quiet (-q) a la grep to be
 	  quiet, add examples.
 
 
-0.004   2019-05-28 (PERLANCAR)
+0.004   2019-05-28  Released-By: PERLANCAR
 
 	- [ux] Shut up log when 'systemctl status' exits with code=3.
 
 	- Fix envelope response.
 
 
-0.003   2019-05-22 (PERLANCAR)
+0.003   2019-05-22  Released-By: PERLANCAR
 
 	- Tweak CLI output for sleep_is_prevented().
 
 
-0.002   2019-05-22 (PERLANCAR)
+0.002   2019-05-22  Released-By: PERLANCAR
 
 	- Add function: sleep_is_prevented().
 
 
-0.001   2019-05-22 (PERLANCAR)
+0.001   2019-05-22  Released-By: PERLANCAR
 
         - First release.
